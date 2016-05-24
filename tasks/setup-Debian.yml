@@ -7,18 +7,14 @@
 - name: Add Logstash repository.
   apt_repository:
     repo: 'deb http://packages.elasticsearch.org/logstash/2.3/debian stable main'
+    update_cache: yes
     state: present
 
-- name: Check if Logstash is already installed.
-  stat: path=/etc/init.d/logstash
-  register: logstash_installed
-
-- name: Update apt cache if repository just added.
-  apt: update_cache=yes
-  when: logstash_installed.stat.exists == false
-
-- name: Install Logstash.
-  apt: pkg=logstash state=present
+- name: Install Logstash and dependencies.
+  package: name={{ item }} state=present
+  with_items:
+    - geoip-database-contrib
+    - logstash
 
 - name: Add Logstash user to adm group (Debian).
   user:
