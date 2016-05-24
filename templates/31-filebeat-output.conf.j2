@@ -1,0 +1,20 @@
+output {
+  if ([type] == "nimble") {
+    elasticsearch {
+      hosts => ["{{ logstash_elasticsearch_host }}"]
+      template_name => nimble
+      template_overwrite => true
+      manage_template => false
+      index => "nimble-%{+YYYY.MM.dd}"
+    }
+  }
+  if ([type] == "nginx") {
+    elasticsearch {
+      hosts => ["{{ logstash_elasticsearch_host }}"]
+      template_name => nginx
+      template_overwrite => true
+      manage_template => false
+      index => "logstash-%{+YYYY.MM.dd}"
+    }
+  }
+}

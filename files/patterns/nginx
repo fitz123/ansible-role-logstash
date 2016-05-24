@@ -1,0 +1,24 @@
+REQUEST \"(?:%{WORD:[request][verb]} %{NOTSPACE:[request][uri]}(?: HTTP/%{NUMBER:[request][httpversion]:float}|)|%{DATA:[request][rawrequest]})\"
+
+NGINXACCESS %{IP:[client][ip]} %{DATA} (-|%{DATA:[client][ident]}) \[%{HTTPDATE:ngacctimestamp}\] %{REQUEST} %{NUMBER:[response][code]:int} (?:%{NUMBER:[response][bytes]:int}|-) (?:\"(?:%{URI:[client][referrer]}|-)\"|%{QS:[client][referrer]}) %{QS:[client][useragent]}
+
+NGINXACCESS_MOD %{DATA:[request][host]} %{IP:[client][ip]} \[%{HTTPDATE:ngacctimestamp}\] %{REQUEST} %{NUMBER:[response][code]:int} (?:%{NUMBER:[response][bytes]:int}|-) (?:\"(?:%{URI:[client][referrer]}|-)\"|%{QS:[client][referrer]}) %{QS:[client][useragent]} %{BASE10NUM:[response][time]:float} (?:%{BASE10NUM:[response][upstream_time]:float}|-)
+
+NGINXACCESS_MOD2 %{DATA:[request][host]} %{IP:[client][ip]} (-|%{DATA:[client][ident]}) \[%{HTTPDATE:ngacctimestamp}\] %{REQUEST} %{NUMBER:[response][code]:int} (?:%{NUMBER:[response][bytes]:int}|-) (?:\"(?:%{URI:[client][referrer]}|-)\"|%{QS:[client][referrer]}) %{QS:[client][useragent]} %{BASE10NUM:[response][time]:float} (?:%{BASE10NUM:[response][upstream_time]:float}|-)
+
+NGINXACCESS_MOD3 %{DATA:[request][host]} %{IP:[client][ip]} %{NUMBER:[connection][number]:int} (-|%{DATA:[client][ident]}) \[%{HTTPDATE:ngacctimestamp}\] %{NUMBER:[connection][requests]:int} %{NUMBER:[request][length]:int} %{REQUEST} %{NUMBER:[response][code]:int} (?:%{NUMBER:[response][bytes]:int}|-) (?:\"(?:%{URI:[client][referrer]}|-)\"|%{QS:[client][referrer]}) %{QS:[client][useragent]} %{BASE10NUM:[response][time]:float} (?:%{BASE10NUM:[response][upstream_time]:float}|-)
+
+NGINXACCESS_MOD4 %{IP:[client][ip]} - (-|%{DATA:[client][ident]}) %{DATA:[request][host]} \[%{HTTPDATE:ngacctimestamp}\] %{NUMBER:[connection][number]:int} %{NUMBER:[connection][requests]:int} %{NUMBER:[request][length]:int} %{REQUEST} %{NUMBER:[response][code]:int} (?:%{NUMBER:[response][bytes]:int}|-) (?:\"(?:%{URI:[client][referrer]}|-)\"|%{QS:[client][referrer]}) %{QS:[client][useragent]} %{BASE10NUM:[response][time]:float} (?:%{BASE10NUM:[response][upstream_time]:float}|-)
+
+NGINXACCESS_MOD5 %{IP:[client][ip]} - (-|%{DATA:[client][ident]}) %{DATA:[request][host]} \[%{HTTPDATE:ngacctimestamp}\] %{NUMBER:[connection][number]:int} %{NUMBER:[connection][requests]:int} %{NUMBER:[request][length]:int} %{REQUEST} %{NUMBER:[response][code]:int} (?:%{NUMBER:[response][bytes]:int}|-) %{BASE10NUM:[response][time]:float} (?:%{BASE10NUM:[response][upstream_time]:float}|-) (?:\"(?:%{URI:[client][referrer]}|-)\"|%{QS:[client][referrer]}) %{QS:[client][useragent]}
+
+NGINXERRORSHRTPREX %{DATESTAMP:ngerrtimestamp} \[%{DATA:severity}\]
+NGINXERRORMIDLPREX %{DATESTAMP:ngerrtimestamp} \[%{DATA:severity}\] %{POSINT:pid:int}#%{NUMBER}:
+NGINXERRORLONGPREX %{DATESTAMP:ngerrtimestamp} \[%{DATA:severity}\] (%{POSINT:pid:int}#%{NUMBER}: \*%{NUMBER}|\*%{NUMBER})
+
+PHPLONGPREF FastCGI sent in stderr: \"PHP message: PHP %{DATA:severity}:
+PHPSHRTPREF PHP message: PHP %{DATA:severity}:
+
+FUNCTION (?<function>%{DATA}\(\))
+
+NAXSI_EXLOG ip=%{IPORHOST:[naxsi_extra][ip]}&server=%{DATA:[naxsi_extra][server]}&uri=%{DATA:[naxsi_extra][uri]}&id=%{NUMBER:[naxsi_extra][id]:num}&zone=%{DATA:[naxsi_extra][zone]}&var_name=%{DATA:[naxsi_extra][var_name]}&content=%{GREEDYDATA:[naxsi_extra][content]}

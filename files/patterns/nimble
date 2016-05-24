@@ -1,0 +1,1 @@
+NIMBLEACCESS ^%{IPORHOST:[client][ip]} - (-|%{DATA:[client][ident]}) \[%{TIMESTAMP_ISO8601:nmblacctimestamp}\] %{REQUEST} %{NUMBER:[response][code]:int} (?:%{NUMBER:[response][bytes]:int}|-) %{NOTSPACE} %{NOTSPACE} \"%{NOTSPACE}\" %{QS:[client][useragent]}
