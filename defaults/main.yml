@@ -10,16 +10,19 @@ logstash_local_syslog_path: /var/log/syslog
 logstash_monitor_local_syslog: false
 
 logstash_ssl_dir: /etc/pki/logstash
-logstash_ssl_certificate_file: logstash-forwarder.crt
-logstash_ssl_key_file: logstash-forwarder.key
+logstash_ssl_certificate_file: ssslab.co.crt
+logstash_ssl_key_file: ssslab.co.key
+logstash_ssl_certificate_authorities: /usr/local/share/ca-certificates/godaddy-ca.crt
 
 logstash_enabled_on_boot: yes
 
 logstash_input_output_conf:
+  - 01-lumberjack-input.conf
   - 03-filebeat-input.conf
-  - 31-filebeat-output.conf
+  - 31-elastic-output.conf
 
 logstash_filters:
   - 05-filebeat-cleaner.conf
+  - 04-tag-split-filter.conf
   - 11-nginx.conf
   - 15-nimble.conf
